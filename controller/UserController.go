@@ -3,12 +3,15 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/r1is/ReportSystem/common"
+	"github.com/r1is/ReportSystem/dto"
 	"github.com/r1is/ReportSystem/model"
 	"github.com/r1is/ReportSystem/util"
 	"gorm.io/gorm"
+	"log"
 	"net/http"
 )
 
+// Register 注册用户
 func Register(ctx *gin.Context) {
 	db := common.GetDB()
 	//获取参数
@@ -55,6 +58,7 @@ func Register(ctx *gin.Context) {
 	})
 }
 
+// Login 用户登录
 func Login(ctx *gin.Context) {
 	db := common.GetDB()
 	// 获取参数
@@ -74,12 +78,30 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{"code": http.StatusUnauthorized, "error": "Unauthorized"})
 		return
 	}
+	token, err := common.ReleaseToken(user)
+	if err != nil {
+		ctx.JSON(200, gin.H{"code": http.StatusInternalServerError, "msg": "系统错误"})
+		log.Fatalf("token genrate error: %v\n", err)
+	}
 
 	// 返回结果
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": http.StatusOK,
-		"msg":  "login success",
+		"data": gin.H{"token": token,
+			"LoginInfo": gin.H{
+				"id":       user.ID,
+				"username": user.Name,
+				"phone":    user.Telephone,
+			}},
+		"msg": "login success",
 	})
+
+}
+
+// UserInfo 获取用户信息
+func UserInfo(ctx *gin.Context) {
+	user, _ := ctx.Get("user")
+	ctx.JSON(200, gin.H{"code": http.StatusOK, "data": gin.H{"user": dto.ToUserDto(user.(model.User))}})
 }
 
 //检查phone是否已经注册
