@@ -21,19 +21,19 @@ func Register(ctx *gin.Context) {
 
 	// 校验手机号
 	if !util.IsValidPhone(telephone) {
-		ctx.JSON(200, gin.H{"code": http.StatusBadRequest, "msg": "手机号格式错误"})
+		common.Failed(ctx, nil, "手机号格式错误")
 		return
 	}
 
 	//校验密码复杂度
 	if !util.IsValidPassword(password) {
-		ctx.JSON(200, gin.H{"code": http.StatusBadRequest, "msg": "密码复杂度不合要求: 密码长度不低于8位，必须同时有数字、特殊符号和大小写字母"})
+		common.Failed(ctx, nil, "密码复杂度不合要求: 密码长度不低于8位，必须同时有数字、特殊符号和大小写字母")
 		return
 	}
 
 	//检查手机号是否已经被注册
 	if isPhoneExist(db, telephone) {
-		ctx.JSON(200, gin.H{"code": http.StatusBadRequest, "msg": "该手机号已注册"})
+		common.Failed(ctx, nil, "该手机号已注册")
 		return
 	}
 
@@ -52,10 +52,11 @@ func Register(ctx *gin.Context) {
 	db.Create(&newUser)
 
 	//返回结果
-	ctx.JSON(200, gin.H{
-		"code": 200,
-		"msg":  "user create success",
-	})
+	common.Success(ctx, gin.H{"UserName": name, "Phone": telephone}, "user create success")
+	//ctx.JSON(200, gin.H{
+	//	"code": 200,
+	//	"msg":  "user create success",
+	//})
 }
 
 // Login 用户登录
@@ -78,6 +79,8 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{"code": http.StatusUnauthorized, "error": "Unauthorized"})
 		return
 	}
+
+	//发放token
 	token, err := common.ReleaseToken(user)
 	if err != nil {
 		ctx.JSON(200, gin.H{"code": http.StatusInternalServerError, "msg": "系统错误"})
