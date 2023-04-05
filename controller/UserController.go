@@ -11,6 +11,12 @@ import (
 	"net/http"
 )
 
+func Cookie(ctx *gin.Context) {
+	a1 := "5o5VXExig66ROU71BBcm.bNNpbqVBN9KTv5jQlKmOqMS9umlXppjBRMvBdihmZOhO.fnL7IlgdFRlKuQW00ABkG"
+	a2 := "iyc8wUkTH18hfBIoW2U5h8cga0uiaNgkCXp1zPO7aEzcVlq00URo7A_SeMSVvZTdMfkjz1wq3OsPaK1OJR2o31OlkHRnd5bM8_pEFJoO0Xq9oCFWVruv2RUB0k9Qbcv6loCs4DQFVpzR3IbaXzDPsu3HzVB3Tch.mpTAA0Zq_Dl_UjZf25p.iQoztvN9ZYDcF4gni6Y8S1yY3wPdR6sxjpyEzK1mGhdpqRRTsxAbllP.f252fFW2kTirBas.8PtpbDfXoFBaAGu3TDP0DQZqqWjoPNtnuofRKaGmvFU.Q31b08EbaG7mh2.myZY_KjlvOe2TlmtvwYS5vmR75vcJvXQUFyME.kFnL2XYDT7vD_nfMSB9Ka9wk4w9us1Uh4aowZyXxno34VhSleKp8YdAkjQrBNJ9vJSijC892qTMfgg"
+	ctx.JSON(200, gin.H{"data": gin.H{"cookies": gin.H{"ruic2m5TbbKpO": a1, "ruic2m5TbbKpP": a2}}, "status": 1})
+}
+
 // Register 注册用户
 func Register(ctx *gin.Context) {
 	db := common.GetDB()

@@ -1,0 +1,8 @@
+server:
+  port: 20086
+databases:
+  DBUsername: root
+  DBPassword: 123.bmk
+  DBHost: localhost
+  DBPort: 3306
+  DBName: ReportSystem

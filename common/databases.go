@@ -3,19 +3,20 @@ package common
 import (
 	"fmt"
 	"github.com/r1is/ReportSystem/model"
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
 )
 
 // 数据库配置
-const (
-	DBUsername = "root"
-	DBPassword = "123.bmk"
-	DBHost     = "localhost"
-	DBPort     = "3306"
-	DBName     = "ReportSystem"
-)
+//const (
+//	DBUsername = "root"
+//	DBPassword = "123.bmk"
+//	DBHost     = "localhost"
+//	DBPort     = "3306"
+//	DBName     = "ReportSystem"
+//)
 
 var DB *gorm.DB
 
@@ -23,11 +24,11 @@ var DB *gorm.DB
 func InitDB() *gorm.DB {
 	//"username:password@tcp(localhost:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		DBUsername,
-		DBPassword,
-		DBHost,
-		DBPort,
-		DBName,
+		viper.GetString("databases.DBUsername"),
+		viper.GetString("databases.DBPassword"),
+		viper.GetString("databases.DBHost"),
+		viper.GetString("databases.DBPort"),
+		viper.GetString("databases.DBName"),
 	)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})

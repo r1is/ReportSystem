@@ -4,17 +4,21 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/r1is/ReportSystem/common"
+	"github.com/r1is/ReportSystem/config"
 	"github.com/r1is/ReportSystem/router"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
 func main() {
+	config.InitConfig()
 	db := common.InitDB()
 
 	r := gin.Default()
 	router.CollectRoute(r)
+	port := viper.GetString("server.port")
 
-	r.Run(":8081")
+	r.Run(":" + port)
 	performDBOperations(db)
 }
 

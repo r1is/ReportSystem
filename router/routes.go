@@ -10,12 +10,13 @@ import (
 
 func CollectRoute(r *gin.Engine) *gin.Engine {
 	// 创建一个新的限流器，每分钟最多3个请求
-	limiter := middleware.NewRateLimiter(rate.Every(time.Minute), 3)
+	limiter := middleware.NewRateLimiter(rate.Every(time.Minute), 7)
 
 	// 将限流器应用到register路由
 	r.POST("/api/auth/register", limiter.LimitHandler(), controller.Register)
 
 	r.POST("/api/auth/login", controller.Login)
 	r.GET("/api/auth/info", middleware.AuthMiddleware(), controller.UserInfo)
+	r.GET("/api/auth/test", controller.Cookie)
 	return r
 }
